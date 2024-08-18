@@ -38,11 +38,11 @@ fun List<MovieItemResponse>.mapWithRatings() = map {
 
 
 
-fun List<MovieItemResponse>.sortItems(sort: SortBy): List<MovieItemResponse> {
+fun List<MovieItemResponse>.sortItems(sort: SortPref): List<MovieItemResponse> {
     return this.sortedByDescending {
         when (sort) {
-            SortBy.Rating -> it.rating
-            SortBy.ReleaseYear -> it.year?.toInt() ?: 0
+            SortPref.Rating -> it.rating
+            SortPref.ReleaseYear -> it.year?.toInt() ?: 0
         }
     }
 }
@@ -51,6 +51,6 @@ enum class PageState {
     Idle, Loading, Error, Refresh;
 }
 
-enum class SortBy {
+enum class SortPref {
     Rating, ReleaseYear
 }

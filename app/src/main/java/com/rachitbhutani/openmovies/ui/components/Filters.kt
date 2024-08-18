@@ -14,23 +14,22 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.rachitbhutani.openmovies.MainViewModel
 import com.rachitbhutani.openmovies.R
-import com.rachitbhutani.openmovies.utils.SortBy
+import com.rachitbhutani.openmovies.utils.SortPref
 
 @Composable
-fun LayoutFilterGroup(modifier: Modifier = Modifier) {
-    val viewModel: MainViewModel = hiltViewModel()
-    val isList by viewModel.showAsList.collectAsState()
+fun LayoutFilterGroup(
+    modifier: Modifier = Modifier,
+    isList: Boolean,
+    updateFilter: (Boolean) -> Unit
+) {
     Row(
         modifier.border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(16.dp)),
         verticalAlignment = Alignment.CenterVertically
@@ -38,7 +37,7 @@ fun LayoutFilterGroup(modifier: Modifier = Modifier) {
         Image(
             modifier = modifier
                 .clickable {
-                    viewModel.showAsList.value = true
+                    updateFilter.invoke(true)
                 }
                 .padding(vertical = 4.dp, horizontal = 8.dp)
                 .size(20.dp),
@@ -55,7 +54,7 @@ fun LayoutFilterGroup(modifier: Modifier = Modifier) {
         Image(
             modifier = modifier
                 .clickable {
-                    viewModel.showAsList.value = false
+                    updateFilter.invoke(false)
                 }
                 .padding(vertical = 4.dp, horizontal = 8.dp)
                 .size(20.dp),
@@ -67,9 +66,7 @@ fun LayoutFilterGroup(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun SortFilterGroup(modifier: Modifier = Modifier) {
-    val viewModel: MainViewModel = hiltViewModel()
-    val sortBy by viewModel.sortBy.collectAsState()
+fun SortFilterGroup(modifier: Modifier = Modifier, sortPref: SortPref, onSortChange: (SortPref) -> Unit) {
     Row(
         modifier.border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(16.dp)),
         verticalAlignment = Alignment.CenterVertically
@@ -77,12 +74,12 @@ fun SortFilterGroup(modifier: Modifier = Modifier) {
         Text(
             modifier = modifier
                 .clickable {
-                    viewModel.sortBy.value = SortBy.Rating
+                    onSortChange.invoke(SortPref.Rating)
                 }
                 .padding(vertical = 4.dp, horizontal = 8.dp)
                 .height(20.dp),
-            text = "Rating",
-            fontWeight = if (sortBy == SortBy.Rating) FontWeight.Bold else FontWeight.Normal
+            text = stringResource(R.string.rating),
+            fontWeight = if (sortPref == SortPref.Rating) FontWeight.Bold else FontWeight.Normal
         )
         Spacer(
             modifier = Modifier
@@ -93,12 +90,12 @@ fun SortFilterGroup(modifier: Modifier = Modifier) {
         Text(
             modifier = modifier
                 .clickable {
-                    viewModel.sortBy.value = SortBy.ReleaseYear
+                    onSortChange(SortPref.ReleaseYear)
                 }
                 .padding(vertical = 4.dp, horizontal = 8.dp)
                 .height(20.dp),
-            text = "Release Year",
-            fontWeight = if (sortBy == SortBy.ReleaseYear) FontWeight.Bold else FontWeight.Normal
+            text = stringResource(R.string.release_year),
+            fontWeight = if (sortPref == SortPref.ReleaseYear) FontWeight.Bold else FontWeight.Normal
         )
     }
 }

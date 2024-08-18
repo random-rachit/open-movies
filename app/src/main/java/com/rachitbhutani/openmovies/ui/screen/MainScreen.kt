@@ -37,6 +37,9 @@ fun MainScreen() {
     var query by remember { mutableStateOf("") }
     val movies = remember { viewModel.moviesFlow }
 
+    val isList by viewModel.showAsList.collectAsState()
+    val sortPref by viewModel.sortPref.collectAsState()
+
     val pageStatus by viewModel.pageState.collectAsState()
 
     LaunchedEffect(query) {
@@ -59,9 +62,13 @@ fun MainScreen() {
 
         //Filters
         Row {
-            LayoutFilterGroup(modifier = Modifier.padding(vertical = 4.dp))
+            LayoutFilterGroup(modifier = Modifier.padding(vertical = 4.dp), isList) {
+                viewModel.showAsList.value = it
+            }
             Spacer(modifier = Modifier.width(8.dp))
-            SortFilterGroup(modifier = Modifier.padding(vertical = 4.dp))
+            SortFilterGroup(modifier = Modifier.padding(vertical = 4.dp), sortPref) {
+                viewModel.sortPref.value = it
+            }
         }
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -70,12 +77,18 @@ fun MainScreen() {
             Text(
                 "Something's not right",
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxSize().padding(top = 24.dp)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 24.dp)
             )
         } else MovieBucket(movies = movies)
 
+        //Loader
         if (pageStatus == PageState.Loading) {
-            LinearProgressIndicator(Modifier.width(36.dp).align(Alignment.CenterHorizontally))
+            LinearProgressIndicator(
+                Modifier
+                    .width(36.dp)
+                    .align(Alignment.CenterHorizontally))
         }
         Spacer(modifier = Modifier.height(8.dp))
     }

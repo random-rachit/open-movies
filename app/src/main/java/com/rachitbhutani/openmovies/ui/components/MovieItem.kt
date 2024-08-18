@@ -103,32 +103,3 @@ fun Thumbnail(modifier: Modifier = Modifier, image: String?, caption: String?) {
         )
     }
 }
-
-@Preview
-@Composable
-fun MovieItemPrev() {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        MovieListItem(
-            data = MovieUiData("Inside Out", "An animated film", "", "15 Aug, 2024", 4)
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-        Row(Modifier.height(200.dp)) {
-            MovieGridItem(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp),
-                data = MovieUiData("Inside Out", "An animated film", "", "15 Aug, 2024", 4)
-            )
-            MovieGridItem(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp),
-                data = MovieUiData("Inside Out", "An animated film", "", "15 Aug, 2024", 4)
-            )
-        }
-    }
-}

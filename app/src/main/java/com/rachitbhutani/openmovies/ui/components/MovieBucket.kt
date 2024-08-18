@@ -38,7 +38,7 @@ fun MovieBucket(
     val spanSize = if (isList) 2 else 1
     val listState = rememberLazyGridState()
     val pageState by viewModel.pageState.collectAsState()
-    val sortBy by viewModel.sortBy.collectAsState()
+    val sortBy by viewModel.sortPref.collectAsState()
 
     val shouldStartPaginate = remember {
         derivedStateOf {
