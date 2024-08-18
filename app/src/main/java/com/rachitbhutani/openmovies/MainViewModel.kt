@@ -1,13 +1,17 @@
 package com.rachitbhutani.openmovies
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rachitbhutani.openmovies.data.MovieRepository
 import com.rachitbhutani.openmovies.data.remote.MovieItemResponse
 import com.rachitbhutani.openmovies.network.NetworkResponse
+import com.rachitbhutani.openmovies.utils.PageState
+import com.rachitbhutani.openmovies.utils.SortBy
 import com.rachitbhutani.openmovies.utils.handleApi
 import com.rachitbhutani.openmovies.utils.mapWithRatings
+import com.rachitbhutani.openmovies.utils.sortItems
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -34,11 +38,11 @@ class MainViewModel @Inject constructor(private val repository: MovieRepository)
         val isReset = query != currentQuery
         if (isReset) {
             searchJob?.cancel()
-            pageState.value = PageState.Idle
+            pageState.value = PageState.Loading
             currentPage = 1
         }
         searchJob = viewModelScope.launch {
-            delay(500)
+            delay(1000)
             if (isReset.not()) {
                 currentPage++
             } else {
@@ -64,21 +68,4 @@ class MainViewModel @Inject constructor(private val repository: MovieRepository)
         }
     }
 
-}
-
-fun List<MovieItemResponse>.sortItems(sort: SortBy): List<MovieItemResponse> {
-    return this.sortedByDescending {
-        when (sort) {
-            SortBy.Rating -> it.rating
-            SortBy.ReleaseYear -> it.year?.toInt() ?: 0
-        }
-    }
-}
-
-enum class PageState {
-    Idle, Loading, Error, Refresh;
-}
-
-enum class SortBy {
-    Rating, ReleaseYear
 }

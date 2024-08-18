@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -80,7 +81,7 @@ fun MainScreen() {
             SortFilterGroup(modifier = Modifier.padding(vertical = 4.dp))
         }
         Spacer(modifier = Modifier.height(8.dp))
-        if (pageStatus == PageState.Error || movies.isEmpty()) {
+        if (pageStatus == PageState.Error) {
             Text(
                 "Something's not right",
                 textAlign = TextAlign.Center,
@@ -88,7 +89,7 @@ fun MainScreen() {
             )
         } else MovieBucket(movies = movies)
         if (pageStatus == PageState.Loading) {
-            LinearProgressIndicator(Modifier.width(24.dp))
+            LinearProgressIndicator(Modifier.width(36.dp).align(Alignment.CenterHorizontally))
         }
         Spacer(modifier = Modifier.height(8.dp))
     }

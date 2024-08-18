@@ -35,3 +35,22 @@ fun List<MovieItemResponse>.mapWithRatings() = map {
     it.rating = (Math.random() * 10).toInt().coerceIn(1,10)
     it
 }
+
+
+
+fun List<MovieItemResponse>.sortItems(sort: SortBy): List<MovieItemResponse> {
+    return this.sortedByDescending {
+        when (sort) {
+            SortBy.Rating -> it.rating
+            SortBy.ReleaseYear -> it.year?.toInt() ?: 0
+        }
+    }
+}
+
+enum class PageState {
+    Idle, Loading, Error, Refresh;
+}
+
+enum class SortBy {
+    Rating, ReleaseYear
+}
