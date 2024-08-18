@@ -31,7 +31,9 @@ import com.rachitbhutani.openmovies.ui.components.LayoutFilterGroup
 import com.rachitbhutani.openmovies.ui.components.MovieBucket
 import com.rachitbhutani.openmovies.ui.components.SearchBar
 import com.rachitbhutani.openmovies.ui.components.SortFilterGroup
+import com.rachitbhutani.openmovies.ui.screen.MainScreen
 import com.rachitbhutani.openmovies.ui.theme.OpenMoviesTheme
+import com.rachitbhutani.openmovies.utils.PageState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -49,48 +51,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-@Composable
-fun MainScreen() {
-    val viewModel: MainViewModel = hiltViewModel()
-    var query by remember { mutableStateOf("") }
-    val movies = remember { viewModel.moviesFlow }
-
-    val pageStatus by viewModel.pageState.collectAsState()
-
-    LaunchedEffect(query) {
-        if (query != "") viewModel.getMovies(query.trim())
-    }
-
-    Column(
-        Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(16.dp)
-    ) {
-        SearchBar {
-            if (query == it.trim()) return@SearchBar
-            query = it
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Row {
-            LayoutFilterGroup(modifier = Modifier.padding(vertical = 4.dp))
-            Spacer(modifier = Modifier.width(8.dp))
-            SortFilterGroup(modifier = Modifier.padding(vertical = 4.dp))
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        if (pageStatus == PageState.Error) {
-            Text(
-                "Something's not right",
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxSize().padding(top = 24.dp)
-            )
-        } else MovieBucket(movies = movies)
-        if (pageStatus == PageState.Loading) {
-            LinearProgressIndicator(Modifier.width(36.dp).align(Alignment.CenterHorizontally))
-        }
-        Spacer(modifier = Modifier.height(8.dp))
     }
 }

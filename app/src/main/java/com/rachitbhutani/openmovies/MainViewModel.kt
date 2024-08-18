@@ -46,6 +46,7 @@ class MainViewModel @Inject constructor(private val repository: MovieRepository)
             if (isReset.not()) {
                 currentPage++
             } else {
+                moviesFlow.clear()
                 currentQuery = query
             }
             pageState.value = PageState.Loading
